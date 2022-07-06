@@ -1,18 +1,11 @@
 # your code goes here ...
 #Download Python from DockerHub and use it
-FROM python:latest
-
-#Set the working directory in the Docker container
-WORKDIR /app
-
-#Copy the dependencies file to the working directory
-COPY /src/requirements.txt .
-
-#Install the dependencies
+FROM python:3.7
+RUN mkdir /usr/src/app/
+WORKDIR /usr/src/app/
+EXPOSE 80
+EXPOSE 443
+COPY . /usr/src/app/
+RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
-
-#Copy the Flask app code to the working directory
-COPY src/ .
-
-#Run the container
-CMD [ "python", "./src/server.py" ]
+CMD [ "python", "./app/src/server.py" ]
