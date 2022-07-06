@@ -2,14 +2,30 @@ version: "3"
 services:
   app:
     container_name: containerize_app_1
-    restart: always
-    image: flask
-    environment: 
-        - APP_NAME=flask
+    image: containerize_app:latest
+    build: ./app
+    volumes:
+      - "./app/src:/service/src"
+      - "./nginx/files/localhost.crt:/service/conf/app.crt"
+      - "./nginx/files/localhost.key:/service/conf/app.key"
+    user: app
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
   nginx:
     container_name: containerize_nginx_1
-    image: flask
+    image: containerize_nginx:latest
+    build: ./nginx
+    volumes:
+      - "./nginx/files/localhost.crt:/etc/nginx/ssl/app.crt"
+      - "./nginx/files/localhost.key:/etc/nginx/ssl/app.key"
     ports:
-        - "8000"
-    depends_on: 
-        - app
+      - "443:8443"
+      - "80:8080"
+    user: nginx
+    deploy:
+      resources:
+        limits:
+          memory: 256M
