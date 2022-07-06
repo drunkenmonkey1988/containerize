@@ -1,0 +1,15 @@
+version: "3"
+services:
+  app:
+    container_name: containerize_app_1
+    restart: always
+    image: flask
+    environment: 
+        - APP_NAME=flask
+  nginx:
+    container_name: containerize_nginx_1
+    image: flask
+    ports:
+        - "8000"
+    depends_on: 
+        - app
